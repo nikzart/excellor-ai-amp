@@ -289,6 +289,9 @@ function App() {
                             {children}
                           </code>
                         );
+                      },
+                      img({ node, ...props }) {
+                        return <img {...props} className="message-image" alt={props.alt || 'Image'} />;
                       }
                     }}
                   >
