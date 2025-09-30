@@ -30,6 +30,7 @@ function App() {
   const [documents, setDocuments] = useState([]);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [viewImage, setViewImage] = useState(null);
 
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -268,7 +269,14 @@ function App() {
                 </div>
                 <div className="message-content">
                   {message.image && (
-                    <img src={message.image} alt="Uploaded" className="message-image" />
+                    <img
+                      src={message.image}
+                      alt="Uploaded"
+                      className="message-image"
+                      onClick={() => setViewImage(message.image)}
+                      style={{ cursor: 'pointer' }}
+                      title="Click to view full size"
+                    />
                   )}
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
@@ -291,7 +299,16 @@ function App() {
                         );
                       },
                       img({ node, ...props }) {
-                        return <img {...props} className="message-image" alt={props.alt || 'Image'} />;
+                        return (
+                          <img
+                            {...props}
+                            className="message-image"
+                            alt={props.alt || 'Image'}
+                            onClick={() => setViewImage(props.src)}
+                            style={{ cursor: 'pointer' }}
+                            title="Click to view full size"
+                          />
+                        );
                       }
                     }}
                   >
@@ -424,6 +441,18 @@ function App() {
                 </p>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Viewer Modal */}
+      {viewImage && (
+        <div className="modal-overlay" onClick={() => setViewImage(null)}>
+          <div className="image-viewer-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setViewImage(null)}>
+              <X size={24} />
+            </button>
+            <img src={viewImage} alt="Full size" className="full-size-image" />
           </div>
         </div>
       )}
