@@ -222,8 +222,10 @@ body {
 .messages-container {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
   scroll-behavior: smooth;
+  width: 100%;
 }
 
 .welcome-message {
@@ -253,9 +255,11 @@ body {
   display: flex;
   gap: 16px;
   max-width: 900px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   animation: fadeIn 0.3s ease;
+  overflow: hidden;
 }
 
 @keyframes fadeIn {
@@ -294,10 +298,16 @@ body {
 .message-content {
   flex: 1;
   padding-top: 6px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .message-content p {
   margin-bottom: 12px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .message-content pre {
