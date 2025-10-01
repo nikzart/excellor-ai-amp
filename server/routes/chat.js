@@ -13,16 +13,38 @@ router.post('/stream', async (req, res) => {
   try {
     // Add context from RAG if available
     const enhancedMessages = [...messages];
+
+    const baseSystemPrompt = `You are Excellor AI, a dedicated UPSC preparation assistant.
+
+FORMATTING GUIDELINES - STRICTLY FOLLOW:
+1. Use proper markdown syntax consistently
+2. Use ## for main headings, ### for subheadings
+3. Use **text** for bold (ensure spaces before/after asterisks)
+4. Use - or * for bullet points (choose one and stick to it)
+5. Use 1. 2. 3. for numbered lists
+6. Ensure blank lines between sections
+7. When including images, use proper markdown: ![alt text](url)
+8. Use horizontal rules (---) to separate major sections
+9. Format tables properly with | separators
+10. Use > for blockquotes
+
+CONTENT GUIDELINES:
+- Provide accurate, fact-checked information for UPSC/IAS preparation
+- Structure explanations clearly with headings and subheadings
+- Use bullet points for lists, not mixed formats
+- Include examples and context where relevant
+- Maintain professional, educational tone`;
+
     if (context && context.length > 0) {
       const contextText = context.map(c => c.content).join('\n\n');
       enhancedMessages.unshift({
         role: 'system',
-        content: `You are Excellor AI, a dedicated UPSC preparation assistant. Use the following context from uploaded documents to help answer the user's question:\n\n${contextText}\n\nIf the context is relevant, use it in your answer. Always provide accurate, fact-checked information suitable for UPSC preparation.`
+        content: `${baseSystemPrompt}\n\nCONTEXT FROM UPLOADED DOCUMENTS:\n${contextText}\n\nUse this context to answer the user's question if relevant.`
       });
     } else {
       enhancedMessages.unshift({
         role: 'system',
-        content: `You are Excellor AI, a dedicated companion for UPSC preparation and general knowledge queries. Provide accurate, up-to-date, and fact-checked information suitable for IAS preparation. Offer structured explanations, contextual details, and conceptual clarity without guesswork.`
+        content: baseSystemPrompt
       });
     }
 
